@@ -1,0 +1,7 @@
+# Usage: ln -s ~/.dotfiles/default.ctags .ctags.d/.
+
+# Programming languages to generate tags for
+--languages=C,C++,CPreProcessor,Python,Go
+
+# Treat Cython as Python
+--langmap=Python:.pyx,Python:.pxi
