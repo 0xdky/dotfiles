@@ -2,6 +2,7 @@
 ;;; Time-stamp: <2020-09-12 10:32:11 dhruva>
 ;;; Commentary:
 ;;; Simple Emacs setup for C/C++ development using language server
+;;; Usage: ln -s ~/.dotfiles/init.el ~/.emacs.d/init.el
 
 ;; Setup disaply related at the top
 (menu-bar-mode -1)

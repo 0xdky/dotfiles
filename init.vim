@@ -1,10 +1,12 @@
 " vim:sw=4
+" Usage: ln -s ~/.dotfiles/init.vim ~/.config/nvim/init.vim
+
 set sw=8
 set wrap
 set smarttab
 set nowrapscan
 set ignorecase
-set background=light
+set background=dark
 
 " Get an emacs like modeline always
 set laststatus=2
@@ -24,16 +26,8 @@ func! DiffSetup()
     wincmd w
     set nofoldenable foldcolumn=0
     set wrap
-    " set diffopt+=iwhite
+    set diffopt+=iwhite
 endfunc
-
-" Call the customizations in diff mode
-if &diff
-    autocmd VimEnter * call DiffSetup()
-    " Update diff on save
-    autocmd BufWritePost * diffupdate
-    autocmd VimResized * wincmd =
-endif
 
 " Specify a directory for plugins
 " - For Neovim: stdpath('data') . '/plugged'
@@ -51,6 +45,9 @@ endif
 " Initialize plugin system
 call plug#end()
 
+" set termguicolors
+colorscheme monochrome
+
 if has('nvim')
     " lua require'nvim_lsp'.gopls.setup{}
     " lua require'nvim_lsp'.pyls.setup{}
@@ -62,8 +59,18 @@ endif
 " Fuzzy completions
 set rtp+=/usr/local/opt/fzf
 
-set termguicolors
-" colorscheme monochrome
+" Call the customizations in diff mode
+if &diff
+    highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+    highlight DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+    highlight DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+    highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 
-" hi Normal guifg=#212121 guibg=white
+    autocmd VimEnter * call DiffSetup()
+
+    " Update diff on save
+    autocmd BufWritePost * diffupdate
+    autocmd VimResized * wincmd =
+endif
+
 hi StatusLine guifg=#333333 guibg=silver
