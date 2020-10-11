@@ -36,6 +36,9 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 " Make sure you use single quotes
 
+" Use release branch (recommend)
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 Plug 'fxn/vim-monochrome'
 
 if has('nvim-v0.5.0')

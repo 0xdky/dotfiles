@@ -465,13 +465,16 @@ jenv() {
 }
 
 if [ $OS = "darwin" ] ; then
-    export JAVA_HOME=$(dirname $(dirname $(jenv which javac)))
-    if [ -z $(launchctl getenv JAVA_HOME) ] ; then
+    JAVA_HOME=$(launchctl getenv JAVA_HOME)
+    if [ -z "${JAVA_HOME}" ] ; then
+	export JAVA_HOME=$(dirname $(dirname $(jenv which javac)))
 	echo "Setting system wide JAVA_HOME: ${JAVA_HOME}"
 	launchctl setenv JAVA_HOME "${JAVA_HOME}"
     fi
 fi
 export MAVEN_OPTS="-Xmx2g -XX:MaxMetaspaceSize=512m"
+
+if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 # No time for experimenting with Graal
 # GRAALVM_HOME=/Applications/graalvm-ce/Contents/Home
