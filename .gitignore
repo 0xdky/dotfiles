@@ -13,5 +13,6 @@ irony/
 /init.el~
 transient/
 /.lsp-session-v1
-.idea/**
-.venv*/**
+**/.idea/**
+**/.venv*/**
+**/.ccls-cache/**
