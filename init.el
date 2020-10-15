@@ -1,5 +1,5 @@
 ;;; package --- Minimal Emacs init file
-;;; Time-stamp: <2020-09-12 10:32:11 dhruva>
+;;; Time-stamp: <2020-10-15 09:01:12 dhruva>
 ;;; Commentary:
 ;;; Simple Emacs setup for C/C++ development using language server
 ;;; Usage: ln -s ~/.dotfiles/init.el ~/.emacs.d/init.el
@@ -48,7 +48,7 @@
 (setq gc-cons-threshold 50000000)
 (setq large-file-warning-threshold 100000000)
 
-(setq default-frame-alist '((width . 120) (height . 40)))
+(setq default-frame-alist '((width . 120) (height . 50)))
 (add-to-list 'default-frame-alist '(font . "Menlo 14"))
 (setq frame-title-format
       '((:eval (if (buffer-file-name)

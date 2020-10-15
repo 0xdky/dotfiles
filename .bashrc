@@ -55,7 +55,7 @@ alias cling='${CLING_HOME}/bin/cling --nologo -l ${HOME}/.clingrc'
 
 # llvm from homebrew
 LLVM_HOME=/usr/local/opt/llvm
-PATH=${LLVM_HOME}/bin:${PATH}
+# PATH=${LLVM_HOME}/bin:${PATH}
 LIB_PATH=${LIB_PATH}:${LLVM_HOME}/lib
 HEADER_PATH=${HEADER_PATH}:${LLVM_HOME}/include
 LDFLAGS="${LDFLAGS} -L${LLVM_HOME}/lib -Wl,-rpath,${LLVM_HOME}/lib"

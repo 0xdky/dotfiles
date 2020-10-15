@@ -16,3 +16,5 @@ transient/
 **/.idea/**
 **/.venv*/**
 **/.ccls-cache/**
+**/.bzr/**
+tags

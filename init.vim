@@ -36,13 +36,24 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 " Make sure you use single quotes
 
-" Use release branch (recommend)
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 Plug 'fxn/vim-monochrome'
 
 if has('nvim-v0.5.0')
     Plug 'neovim/nvim-lsp'
+else
+    " Use release branch (recommend)
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+    " Use `[g` and `]g` to navigate diagnostics
+    " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+    nmap <silent> [g <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+    " GoTo code navigation.
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gy <Plug>(coc-type-definition)
+    nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
 endif
 
 " Initialize plugin system
