@@ -15,7 +15,7 @@ EDITOR=${EDITOR:-nvim}
 # Python stuff
 export  PYTHONDONTWRITEBYTECODE=1
 
-# export GO111MODULE=on
+export GO111MODULE=on
 export GOPATH=${HOME}/devel/bitbucket/go
 export GOBIN=${GOPATH}/bin/${OS}
 export PATH=${GOBIN}:${PATH}
@@ -50,7 +50,7 @@ LIB_PATH=/usr/local/lib
 HEADER_PATH=/usr/local/include
 
 # cling - C++ repl
-CLING_HOME=${HOME}/installs/cling_2020-09-08_mac1015
+CLING_HOME=${HOME}/installs/cling
 alias cling='${CLING_HOME}/bin/cling --nologo -l ${HOME}/.clingrc'
 
 # llvm from homebrew
@@ -131,8 +131,7 @@ alias bbcgorel="echo release/$(date +"%Y%m%d")"
 DEVUSR=dkrishnamurthy
 alias devenv='mux ${DEVUSR}@${DEVUSR}.dev.devbucket.org'
 alias em="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -q -a /Applications/Emacs.app/Contents/MacOS/Emacs -t -f ~/.emacs.d/server/emacs.server"
-alias venv='virtualenv'
-alias venv3='python3 -m venv'
+alias venv='pyenv virtualenv'
 alias wscreate="hdiutil create -size 25gb -fs 'Case-sensitive HFS+' -type SPARSE -volname workspace workspace"
 alias wsmount='hdiutil attach -quiet -mountpoint ~/workspace ~/Documents/workspace.sparseimage'
 alias wsunmount='hdiutil detach -quiet ~/workspace'
@@ -411,17 +410,18 @@ function rged() {
 }
 
 function neovim_update() {
-    if [ "$1" = "darwin" ] ; then
+    os=${1:-${OS}}
+    if [ "${os}" = "darwin" ] ; then
 	plat="macos"
-    elif [ "$1" = "linux" ] ; then
+    elif [ "${os}" = "linux" ] ; then
 	plat="linux64"
     else
-	echo invalid platform: $1
+	echo invalid platform: ${os}
 	return -1
     fi
 
-    mkdir -p ~/installs/$1
-    pushd ~/installs/$1
+    mkdir -p ~/installs/${os}
+    pushd ~/installs/${os}
     set -x
     curl -sL https://github.com/neovim/neovim/releases/download/nightly/nvim-${plat}.tar.gz|tar --strip-components=1 -zxf -
     set +x
@@ -474,6 +474,7 @@ if [ $OS = "darwin" ] ; then
 fi
 export MAVEN_OPTS="-Xmx2g -XX:MaxMetaspaceSize=512m"
 
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 # No time for experimenting with Graal

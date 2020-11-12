@@ -1,87 +1,109 @@
+# vim:sw=4
 [user]
-	name = Dhruva Krishnamurthy
-	email = dkrishnamurthy@atlassian.com
+    name = Dhruva Krishnamurthy
+    email = dhruvakm@gmail.com
+
+[includeIf "gitdir:~/devel/"]
+    path = ~/devel/.gitconfig
+
+[includeIf "gitdir:~/stub/git/"]
+    path = ~/stub/git/.gitconfig
+
+[includeIf "gitdir:~/stub/git/krupa/"]
+    path = ~/stub/git/krupa/.gitconfig
 
 [url "git@bitbucket.org:"]
-	insteadOf = https://bitbucket.org/
+    insteadOf = https://bitbucket.org/
 
 [core]
-	editor = nvim
+    editor = nvim
 	# pager = less -+$LESS -FRS
-	filemode = false
-	preloadindex = true
-	excludesfile = ~/.gitignore
-	whitespace = -trailing-space,-indent-with-non-tab,-tab-in-indent
+    filemode = false
+    preloadindex = true
+    excludesfile = ~/.gitignore
+    whitespace = -trailing-space,-indent-with-non-tab,-tab-in-indent
 
 [rerere]
-	enabled = true
+    enabled = true
 
 [apply]
-	whitespace = nowarn
+    whitespace = nowarn
 
 [branch]
-	autosetupmerge = true
+    autosetupmerge = true
 
 [push]
-	default = simple
+    default = simple
 
 [pull]
-	rebase = true
+    rebase = true
 
 [alias]
-	co = checkout
-	ci = commit --untracked-files=no
-	st = status
-	root = rev-parse --show-toplevel
-	ed = "! GIT_PREFIX=${GIT_PREFIX:-^$#&} && git status -s -uno|egrep -v -e '^\\s+D\\s'|egrep -o '[^ ]*$'|sed s%${GIT_PREFIX}%%g"
-	mod = ! git status -s -uno|egrep -v -e '^\\s+D\\s'|egrep -o '[^ ]*$'
-	df = diff -p -w
-	cat = show
-	dt = difftool
-	lg = log --no-merges
-	stat = diff --name-status
-	cdiff = rev-list --oneline --no-merges --ancestry-path
-	sqi = ! REV=`git rev-parse HEAD` && git reset --hard origin/master && git merge --squash $REV
-	vdiff = difftool -t vimdiff
-	br = branch --show-current
-	update = ! git add -u && git commit --amend --no-edit
-	please = ! REMOTE=${1:-origin} && (shift || true) && git push --force-with-lease $REMOTE $(git rev-parse --abbrev-ref HEAD)
-	unpushed = log --branches --not --remotes --no-walk --decorate --oneline
+    co = checkout
+    ci = commit --untracked-files=no
+    st = status
+    root = rev-parse --show-toplevel
+    ed = "! GIT_PREFIX=${GIT_PREFIX:-^$#&} && git status -s -uno|egrep -v -e '^\\s+D\\s'|egrep -o '[^ ]*$'|sed s%${GIT_PREFIX}%%g"
+    mod = ! git status -s -uno|egrep -v -e '^\\s+D\\s'|egrep -o '[^ ]*$'
+    df = diff -p -w
+    cat = show
+    dt = difftool
+    lg = log --no-merges
+    stat = diff --name-status
+    cdiff = rev-list --oneline --no-merges --ancestry-path
+    sqi = ! REV=`git rev-parse HEAD` && git reset --hard origin/master && git merge --squash $REV
+    vdiff = difftool -t vimdiff
+    br = branch --show-current
+    update = ! git add -u && git commit --amend --no-edit
+    please = ! REMOTE=${1:-origin} && (shift || true) && git push --force-with-lease $REMOTE $(git rev-parse --abbrev-ref HEAD)
+    unpushed = log --branches --not --remotes --no-walk --decorate --oneline
 
 [color]
-	ui = auto
-	branch = false
+    ui = auto
+    branch = false
 
 [difftool]
-	prompt = false
+    prompt = false
 
 [submodule]
-	recurse = true
+    recurse = true
 
 [mergetool]
-	keepBackup = false
+    keepBackup = false
 
 [difftool "vimdiff"]
-	cmd = nvim -d $LOCAL $REMOTE
+    cmd = nvim -d $LOCAL $REMOTE
 
 [mergetool "vimdiff"]
-	cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
-	trustExitCode = false
+    cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+    trustExitCode = false
 
 [difftool "p4merge"]
-	cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge $LOCAL $REMOTE
+    cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge $LOCAL $REMOTE
 
 [mergetool "p4merge"]
-	cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge $PWD/$BASE $PWD/$REMOTE $PWD/$LOCAL $PWD/$MERGED
-	trustExitCode = false
+    cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge $PWD/$BASE $PWD/$REMOTE $PWD/$LOCAL $PWD/$MERGED
+    trustExitCode = false
+
+[difftool]
+    prompt = false
+
+[mergetool]
+    prompt = false
+
+[difftool "xcode"]
+    cmd = open -W -a FileMerge --args -left \"$LOCAL\" -right \"$PWD/$REMOTE\"
+
+[mergetool "xcode"]
+    trustExitCode = false
+    cmd = open -W -a FileMerge --args -left \"$PWD/$LOCAL\" -right \"$PWD/$REMOTE\" -ancestor \"$PWD/$REMOTE\" -merge \"$PWD/$MERGED\"
 
 [diff]
-	tool = vimdiff
+    tool = xcode
 
 [merge]
-	tool = vimdiff
-	conflictstyle = diff3
+    tool = xcode
 
 [filesystem "AdoptOpenJDK|11.0.8|/dev/disk1s1"]
-	timestampResolution = 8000 nanoseconds
-	minRacyThreshold = 0 nanoseconds
+    timestampResolution = 8000 nanoseconds
+    minRacyThreshold = 0 nanoseconds

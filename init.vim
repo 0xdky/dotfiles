@@ -38,8 +38,20 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'fxn/vim-monochrome'
 
-if has('nvim-v0.5.0')
-    Plug 'neovim/nvim-lsp'
+if has("nvim-0.5.0")
+    " Instructions from: https://sharksforarms.dev/posts/neovim-rust/
+
+    " Collection of common configurations for the Nvim LSP client
+    Plug 'neovim/nvim-lspconfig'
+
+    " Extensions to built-in LSP, for example, providing type inlay hints
+    Plug 'tjdevries/lsp_extensions.nvim'
+
+    " Autocompletion framework for built-in LSP
+    Plug 'nvim-lua/completion-nvim'
+
+    " Diagnostic navigation and settings for built-in LSP
+    Plug 'nvim-lua/diagnostic-nvim'
 else
     " Use release branch (recommend)
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -88,3 +100,65 @@ if &diff
 endif
 
 hi StatusLine guifg=#333333 guibg=silver
+
+" neovim lsp configuration
+if has("nvim-0.5.0")
+    " Instructions from: https://sharksforarms.dev/posts/neovim-rust/
+    " Configure LSP
+    " https://github.com/neovim/nvim-lspconfig#rust_analyzer
+ 
+lua <<EOF
+
+    -- nvim_lsp object
+local nvim_lsp = require'nvim_lsp'
+
+-- function to attach completion and diagnostics
+-- when setting up lsp
+local on_attach = function(client)
+    require'completion'.on_attach(client)
+    require'diagnostic'.on_attach(client)
+end
+
+-- Enable rust_analyzer
+nvim_lsp.rust_analyzer.setup({ on_attach=on_attach })
+
+-- Enable ccls
+nvim_lsp.ccls.setup({cmd={"ccls"}})
+
+-- Enable gopls
+nvim_lsp.gopls.setup {
+    cmd = {"gopls", "serve"},
+    settings = {
+      gopls = {
+        analyses = {
+          unusedparams = true,
+        },
+        staticcheck = true,
+      },
+    },
+}
+
+EOF
+
+    " Trigger completion with <Tab>
+    inoremap <silent><expr> <TAB>
+		\ pumvisible() ? "\<C-n>" :
+		\ <SID>check_back_space() ? "\<TAB>" :
+		\ completion#trigger_completion()
+
+    function! s:check_back_space() abort
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1]  =~ '\s'
+    endfunction
+
+    " Code navigation shortcuts
+    nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+    nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+    nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+    nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+    nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+    nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+    nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+    nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+    nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+endif
