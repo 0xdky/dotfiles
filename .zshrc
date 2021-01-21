@@ -3,11 +3,6 @@ set -o autocd on
 set -o sharehistory on
 set -o shwordsplit on
 
-# Write the completion script to somewhere in your $fpath
-if [ ! -f ~/.zsh_functions/_atlas ]; then
-    atlas --completion-script-zsh > ~/.zsh_functions/_atlas
-fi
-
 HISTFILE=~/.bash_history
 
 # Reuse bash config as far as possible
@@ -15,6 +10,13 @@ autoload -U +X bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
 
 source /Users/dkrishnamurthy/.bashrc
+
+fpath=(~/.local/share/git-completion/zsh $fpath)
+
+# Write the completion script to somewhere in your $fpath
+if [ ! -f ~/.zsh_functions/_atlas ]; then
+    atlas --completion-script-zsh > ~/.zsh_functions/_atlas
+fi
 
 # For Mac using iTerm2
 bindkey  "^[[H"   beginning-of-line

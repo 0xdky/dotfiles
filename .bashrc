@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # vim:sw=4
 
+# PS4=$'\\\011%D{%s%6.}\011%x\011%I\011%N\011%e\011'
+# setopt xtrace prompt_subst
 set +x
 
 set -o emacs
@@ -66,8 +68,8 @@ export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
 # Rust compiler
 source $HOME/.cargo/env
 
-# Use custom built emacs - alpha
-alias emacs='open -a Emacs.app --args --chdir $(pwd)'
+# tab completion for emacs similar to vim
+compdef emacs=vim
 
 if [ $OS = "darwin" ] ; then
     # To prevent ssh-agent on mac
@@ -102,6 +104,9 @@ export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
 # Build ffmpeg for iOS - youtube downloader
 export FFMPEG_VERSION=snapshot
 
+# For git
+export LESS=-iFRX
+
 # Atlassian specifics
 
 # Useful aliases
@@ -115,8 +120,6 @@ alias docker-cleanup='docker images -a -q --filter "dangling=true"|xargs docker 
 # Java VScode plugin dumpyard
 alias dumpyard='ls /Users/dkrishnamurthy/Library/Application\ Support/Code/User/workspaceStorage'
 alias goupdate='TOP=`pwd`;for g in `find . -type d -name ".git"` ; do cd `dirname $g`; go get -u; cd $TOP; done'
-alias urldecode='python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])"'
-alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])"'
 alias gitstatus='git ls-files -z *[^vendor]|xargs -0 -n1 git blame --line-porcelain HEAD|grep "^author "|sort|uniq -c|sort -nr'
 alias linux='docker run --rm --privileged=true -v ${HOME}:${HOME} --hostname=tinker -it linux'
 alias crepl='cling --nologo -DCLING'
@@ -332,7 +335,7 @@ function aws() {
 export AWS_SDK_LOAD_CONFIG=1
 export SQS_QUEUE_URL=http://localhost:9324/queue/sync
 
-function mktags() {
+function mkgtags() {
     pushd ~/.tags
 
     incpath=/usr/include:/usr/local/include:/Library/Developer/CommandLineTools/usr/include
@@ -431,6 +434,14 @@ function neovim_update() {
 function pipupgrade() {
     PIP=${1:-pip3}
     ${PIP} list -o --format json|jq -s ".[][].name"|tr -d \"|xargs ${PIP} install -U
+}
+
+function urlencode() {
+    python -c "import sys, urllib.parse; print(urllib.parse.quote_plus(sys.argv[1]))" $*
+}
+
+function urldecode() {
+    python -c "import sys, urllib.parse; print(urllib.parse.unquote_plus(sys.argv[1]))" $*
 }
 
 # pf-directory is built with TypeScript!

@@ -1,5 +1,5 @@
 ;;; package --- Minimal Emacs init file
-;;; Time-stamp: <2020-10-15 09:01:12 dhruva>
+;;; Time-stamp: <2021-01-14 17:52:02 dhruva>
 ;;; Commentary:
 ;;; Simple Emacs setup for C/C++ development using language server
 ;;; Usage: ln -s ~/.dotfiles/init.el ~/.emacs.d/init.el
@@ -10,6 +10,7 @@
     (progn
       (tool-bar-mode -1)
       (toggle-scroll-bar -1)
+      (load-theme 'dichromacy)
       (global-display-fill-column-indicator-mode +1)))
 
 ;; Jump to matching paren
@@ -62,11 +63,9 @@
 (setq package-enable-at-startup nil)
 (require 'package)
 (add-to-list 'package-archives
-	     '("gnu" . "http://elpa.gnu.org/packages/"))
+	     '("gnu" . "http://elpa.gnu.org/packages/") t)
 (add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/"))
-;; (add-to-list 'package-archives
-;; 	     '("melpa-stable" . "https://stable.melpa.org/packages/"))
+	     '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -90,11 +89,6 @@
       vc-make-backup-files t)
 (add-to-list 'backup-directory-alist `("." . ,(concat *home "/.backup")))
 (global-auto-revert-mode t)
-
-(use-package solarized-theme
-  :ensure t
-  :config
-  (load-theme 'solarized-dark t t))
 
 (use-package pbcopy
   :ensure t
@@ -194,7 +188,7 @@
 ;;-----------------------------------------------------------------------------
 (c-add-style "dky"
 	     '("cc-mode"
-	       (c-basic-offset . 4)	; Guessed value
+	       (c-basic-offset . 8)	; Guessed value
 	       (c-offsets-alist
 		(access-label . 0)	; Guessed value
 		(arglist-close . c-lineup-close-paren)
@@ -249,7 +243,7 @@
  '(lsp-diagnostics-provider :none)
  '(lsp-prefer-flymake nil t)
  '(package-selected-packages
-   '(solarized-theme counsel flycheck pbcopy python-mode go-mode yaml-mode crux lsp-mode lsp-ui ccls which-key use-package smartparens expand-region)))
+   '(counsel flycheck pbcopy python-mode go-mode yaml-mode crux lsp-mode lsp-ui ccls which-key use-package smartparens expand-region)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

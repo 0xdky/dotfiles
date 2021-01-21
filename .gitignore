@@ -19,3 +19,5 @@ transient/
 **/.bzr/**
 tags
 .venv
+.ccls
+.ccls-cache/**

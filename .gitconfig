@@ -12,12 +12,12 @@
 [includeIf "gitdir:~/stub/git/krupa/"]
     path = ~/stub/git/krupa/.gitconfig
 
-[url "git@bitbucket.org:"]
-    insteadOf = https://bitbucket.org/
+# [url "git@bitbucket.org:"]
+#     insteadOf = https://bitbucket.org/
 
 [core]
     editor = nvim
-	# pager = less -+$LESS -FRS
+    pager = less $LESS
     filemode = false
     preloadindex = true
     excludesfile = ~/.gitignore
@@ -52,11 +52,18 @@
     stat = diff --name-status
     cdiff = rev-list --oneline --no-merges --ancestry-path
     sqi = ! REV=`git rev-parse HEAD` && git reset --hard origin/master && git merge --squash $REV
+    xdiff = difftool -t xcode
     vdiff = difftool -t vimdiff
     br = branch --show-current
     update = ! git add -u && git commit --amend --no-edit
-    please = ! REMOTE=${1:-origin} && (shift || true) && git push --force-with-lease $REMOTE $(git rev-parse --abbrev-ref HEAD)
+    please = "!f() { REMOTE=${1:-origin}; git push --force-with-lease \"${REMOTE}\" $(git rev-parse --abbrev-ref HEAD); }; f"
     unpushed = log --branches --not --remotes --no-walk --decorate --oneline
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 
 [color]
     ui = auto
@@ -76,13 +83,6 @@
 
 [mergetool "vimdiff"]
     cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
-    trustExitCode = false
-
-[difftool "p4merge"]
-    cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge $LOCAL $REMOTE
-
-[mergetool "p4merge"]
-    cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge $PWD/$BASE $PWD/$REMOTE $PWD/$LOCAL $PWD/$MERGED
     trustExitCode = false
 
 [difftool]

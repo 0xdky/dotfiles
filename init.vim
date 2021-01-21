@@ -18,6 +18,18 @@ set vb t_vb=""
 " Handle error when opening files: https://github.com/vim/vim/issues/2049
 set mmp=5000
 
+" Maximize current window
+func! Maximize()
+    if winnr() != winnr('$')|resize|endif
+endfunc
+nnoremap <silent> ww :call Maximize() <CR>
+
+" Close other window
+func! CloseOther()
+    if winnr() != winnr('$')|close|endif
+endfunc
+nnoremap <silent> qq :call CloseOther() <CR>
+
 " Setup diff mode with ignore whitespace
 func! DiffSetup()
     set wrap
@@ -26,7 +38,7 @@ func! DiffSetup()
     wincmd w
     set nofoldenable foldcolumn=0
     set wrap
-    set diffopt+=iwhite
+    " set diffopt+=iwhite
 endfunc
 
 " Specify a directory for plugins
@@ -110,7 +122,7 @@ if has("nvim-0.5.0")
 lua <<EOF
 
     -- nvim_lsp object
-local nvim_lsp = require'nvim_lsp'
+local nvim_lsp = require'lspconfig'
 
 -- function to attach completion and diagnostics
 -- when setting up lsp
