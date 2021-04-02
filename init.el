@@ -1,5 +1,5 @@
 ;;; package --- Minimal Emacs init file
-;;; Time-stamp: <2021-01-14 17:52:02 dhruva>
+;;; Time-stamp: <2021-03-27 08:02:09 dhruva>
 ;;; Commentary:
 ;;; Simple Emacs setup for C/C++ development using language server
 ;;; Usage: ln -s ~/.dotfiles/init.el ~/.emacs.d/init.el
@@ -45,6 +45,7 @@
 (defconst *home (expand-file-name (concat "~" init-file-user)))
 (setq user-mail-address (concat (user-login-name) "@atlassian.com"))
 (add-to-list 'load-path (concat *home "/.site-lisp/"))
+(add-to-list 'load-path (concat *home "/.site-lisp/use-package"))
 
 (setq gc-cons-threshold 50000000)
 (setq large-file-warning-threshold 100000000)
@@ -62,15 +63,17 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (require 'package)
+;; (add-to-list 'package-archives
+;;           '("gnu" . "http://elpa.gnu.org/packages/") t)
+;; (add-to-list 'package-archives
+;; 	     '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives
-	     '("gnu" . "http://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
 
 (eval-when-compile
   (require 'use-package))
@@ -90,10 +93,15 @@
 (add-to-list 'backup-directory-alist `("." . ,(concat *home "/.backup")))
 (global-auto-revert-mode t)
 
-(use-package pbcopy
+(use-package xclip
   :ensure t
   :config
-  (turn-on-pbcopy))
+  (xclip-mode t))
+
+(use-package magit
+  :ensure t
+  :config
+  (xclip-mode t))
 
 (use-package cc-mode
   :ensure t
@@ -125,9 +133,9 @@
   (require 'recentf)
   :ensure t
   :bind
-  ("C-k" . crux-smart-kill-line)
+  ;; ("C-k" . crux-kill-whole-line)
   ("C-c n" . crux-cleanup-buffer-or-region)
-  ("C-c f" . crux-recentf-find-file)
+  ("C-c f" . crux-recentf-ido-find-file)
   ("C-a" . crux-move-beginning-of-line)
   ([home] . crux-move-beginning-of-line))
 
@@ -146,33 +154,18 @@
   :commands (lsp lsp-deferred)
   :bind (
 	 ("C-t" . pop-tag-mark)
-	 ("C-]" . lsp-ui-peek-find-definitions)
-	 ("C-x r" . lsp-ui-peek-find-references)
-	 ("C-x ." . lsp-ui-find-workspace-symbol)
+	 ("C-]" . xref-find-definitions)
+	 ("C-x r" . xref-find-references)
 	 )
   :config
   ;; (add-hook 'go-mode 'lsp-deferred)
   (setq lsp-prefer-flymake nil))
 
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-doc-enable nil
-	lsp-ui-sideline-enable nil)
-  :ensure t)
-
-(use-package ccls
+(use-package eglot
   :ensure t
   :config
-  (setq lsp-enable-snippet nil
-	lsp-enable-file-watchers nil
-	ccls-executable (if (executable-find "ccls") "ccls" "clangd")
-	ccls-args (if (string= ccls-executable "clangd")
-		      '("--all-scopes-completion" "--background-index") nil)
-	ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t))
-	flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
   :hook ((c-mode c++-mode objc-mode) .
-	 (lambda () (require 'ccls) (lsp))))
+	 'eglot-ensure))
 
 (require 'server)
 (setq server-use-tcp t
@@ -188,7 +181,7 @@
 ;;-----------------------------------------------------------------------------
 (c-add-style "dky"
 	     '("cc-mode"
-	       (c-basic-offset . 8)	; Guessed value
+	       (c-basic-offset . 4)	; Guessed value
 	       (c-offsets-alist
 		(access-label . 0)	; Guessed value
 		(arglist-close . c-lineup-close-paren)
@@ -243,7 +236,7 @@
  '(lsp-diagnostics-provider :none)
  '(lsp-prefer-flymake nil t)
  '(package-selected-packages
-   '(counsel flycheck pbcopy python-mode go-mode yaml-mode crux lsp-mode lsp-ui ccls which-key use-package smartparens expand-region)))
+   '(magit ggtags eglot xclip counsel flycheck xclip python-mode go-mode yaml-mode crux lsp-mode which-key use-package smartparens expand-region)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -39,12 +39,12 @@ precmd() {
 	export PS1="$fg_bold[blue]%~$reset_color
 $ "
     else
-	export PS1="[$fg_bold[red]py$reset_color] $fg_bold[blue]%~$reset_color
+	py=${VIRTUAL_ENV##*/}
+	export PS1="[$fg_bold[red]$py$reset_color] $fg_bold[blue]%~$reset_color
 $ "
     fi
     eval "$PROMPT_COMMAND"
 }
 
-eval "$(zoxide init zsh)"
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(zoxide init zsh)"

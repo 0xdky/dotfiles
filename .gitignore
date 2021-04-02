@@ -17,7 +17,9 @@ transient/
 **/.venv*/**
 **/.ccls-cache/**
 **/.bzr/**
+**/.eggs/**
 tags
 .venv
 .ccls
 .ccls-cache/**
+.python-version

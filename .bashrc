@@ -101,9 +101,6 @@ ulimit -S -n 1024
 export ANDROID_NDK_HOME="/usr/local/share/android-ndk"
 export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
 
-# Build ffmpeg for iOS - youtube downloader
-export FFMPEG_VERSION=snapshot
-
 # For git
 export LESS=-iFRX
 
@@ -130,11 +127,10 @@ alias ldd='otool -L'
 alias ptpy='ptpython3'
 alias h='history'
 alias bbcgo='cd /Users/dkrishnamurthy/devel/bitbucket/go/src/bitbucket.org/bitbucket/go'
-alias bbcgorel="echo release/$(date +"%Y%m%d")"
+alias bbcgorel='echo release/$(date +"%Y%m%d")'
 DEVUSR=dkrishnamurthy
 alias devenv='mux ${DEVUSR}@${DEVUSR}.dev.devbucket.org'
 alias em="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -q -a /Applications/Emacs.app/Contents/MacOS/Emacs -t -f ~/.emacs.d/server/emacs.server"
-alias venv='pyenv virtualenv'
 alias wscreate="hdiutil create -size 25gb -fs 'Case-sensitive HFS+' -type SPARSE -volname workspace workspace"
 alias wsmount='hdiutil attach -quiet -mountpoint ~/workspace ~/Documents/workspace.sparseimage'
 alias wsunmount='hdiutil detach -quiet ~/workspace'
@@ -313,14 +309,12 @@ function gcclink {
     done
 }
 
-export MICROSEXE="atlas micros"
+MICROSEXE="atlas micros"
 function micros() {
-    # xpsearch-user-indexer--prod-apse2--CPSS-UINDX-420--2019-03-13-02-38-utc--abll9h7pi39nrb6c
-    if [ "$1" = "stack:delete" ] ; then
-	SRV=`echo $2|awk -F"--" '{print $1}'`
-	ENV=`echo $2|awk -F"--" '{print $2}'`
-	DID=`echo $2|rev|awk -F"--" '{print $1}'|rev`
-	ARGS="$1 $2 -s ${SRV} -d ${DID} -e ${ENV}"
+    if [ "$1" = "ssh" ]; then
+	cmd=$1
+	shift
+	ARGS="service ssh --exception-group bitbucket-cloud-dce-dl-admin $@"
     else
 	ARGS="$@"
     fi
@@ -328,8 +322,8 @@ function micros() {
     ${ACTION} ${MICROSEXE} $ARGS
 }
 
-export AWSEXE=`which aws`
-function aws() {
+AWSEXE=`which aws`
+function faws() {
     ${ACTION} ${AWSEXE} --endpoint-url http://localhost:9324 "$@"
 }
 export AWS_SDK_LOAD_CONFIG=1
@@ -403,7 +397,8 @@ function docker() {
     if [ "${cmd}" = "shell" ] ; then
         ${ACTION} ${DOCKER_EXE} run -it --rm --privileged -v $(realpath ~):/home $* bash -c "cd /home; bash -l"
     else
-        ${ACTION} ${DOCKER_EXE} ${cmd} $*
+	args=$(echo $*|sed 's#-ep #--entrypoint=#')
+        ${ACTION} ${DOCKER_EXE} ${cmd} ${args}
     fi
 }
 
@@ -485,6 +480,7 @@ if [ $OS = "darwin" ] ; then
 fi
 export MAVEN_OPTS="-Xmx2g -XX:MaxMetaspaceSize=512m"
 
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
@@ -507,6 +503,9 @@ HEADER_PATH="${HEADER_PATH}:/usr/local/opt/openssl/include:/usr/local/opt/gettex
 # Postgres binaries
 # PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH
 # DLD_LIBRARY_PATH=/Applications/Postgres.app/Contents/Versions/latest/lib:$DLD_LIBRARY_PATH
+
+# Jailbreaking
+export AZULE=~/stub/git/Azule
 
 # For bitbucket-docker
 export NPMRC="$(launchctl getenv NPMRC)"
@@ -531,7 +530,7 @@ done
 
 # Eliminate duplicates in PATH
 declare -A paths
-_path=".:${HOME}/bin:${HOME}/installs/${OS}/bin"
+_path="${HOME}/bin:${HOME}/installs/${OS}/bin"
 for p in `echo ${PATH} | tr ':' ' '` ; do
     if [ -z "${paths[$p]}" ] ; then
 	paths[$p]=$p
@@ -542,3 +541,6 @@ PATH=${_path}
 unset _path
 
 export PATH CPPFLAGS LDFLAGS MANPATH PYTHONPATH GTAGSLIBPATH
+
+# [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+# eval "$(zoxide init bash)"

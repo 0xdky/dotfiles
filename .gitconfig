@@ -23,6 +23,9 @@
     excludesfile = ~/.gitignore
     whitespace = -trailing-space,-indent-with-non-tab,-tab-in-indent
 
+[init]
+    defaultBranch = master
+
 [rerere]
     enabled = true
 

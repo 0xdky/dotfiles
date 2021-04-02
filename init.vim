@@ -64,6 +64,10 @@ if has("nvim-0.5.0")
 
     " Diagnostic navigation and settings for built-in LSP
     Plug 'nvim-lua/diagnostic-nvim'
+
+    Plug 'nvim-lua/popup.nvim'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
 else
     " Use release branch (recommend)
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -174,3 +178,5 @@ EOF
     nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
     nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
 endif
+
+set rtp+=/usr/local/opt/fzf
