@@ -9,8 +9,9 @@ set ignorecase
 set background=dark
 
 " Get an emacs like modeline always
-set laststatus=2
-set statusline=%t\ %R\ %m\ %P\ %=\ [%04l/%04L,%04v]
+set laststatus=0
+"set statusline=%t\ %R\ %m\ %P\ %=\ [%04l/%04L,%04v]
+"hi StatusLine guifg=#333333 guibg=silver
 
 " visual bell
 set vb t_vb=""
@@ -114,8 +115,6 @@ if &diff
     autocmd BufWritePost * diffupdate
     autocmd VimResized * wincmd =
 endif
-
-hi StatusLine guifg=#333333 guibg=silver
 
 " neovim lsp configuration
 if has("nvim-0.5.0")
