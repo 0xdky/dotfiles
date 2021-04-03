@@ -5,6 +5,8 @@ set -o shwordsplit on
 
 HISTFILE=~/.bash_history
 
+bindkey -e
+
 # Reuse bash config as far as possible
 autoload -U +X bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
