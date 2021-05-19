@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# vim:sw=4
+# vim:sw=4:expandtab
 
 # PS4=$'\\\011%D{%s%6.}\011%x\011%I\011%N\011%e\011'
 # setopt xtrace prompt_subst
@@ -12,7 +12,7 @@ HOME=$(realpath ~)
 USER=$(whoami)
 OS=$(uname -s|tr '[A-Z]' '[a-z]')
 SHELL=$(basename $SHELL)
-EDITOR=${EDITOR:-nvim}
+export EDITOR=${EDITOR:-nvim}
 
 # Python stuff
 export  PYTHONDONTWRITEBYTECODE=1
@@ -53,6 +53,7 @@ HEADER_PATH=/usr/local/include
 
 # cling - C++ repl
 CLING_HOME=${HOME}/installs/cling
+CLING_HOME=/usr/local
 alias cling='${CLING_HOME}/bin/cling --nologo -l ${HOME}/.clingrc'
 
 # llvm from homebrew
@@ -61,6 +62,7 @@ LLVM_HOME=/usr/local/opt/llvm
 LIB_PATH=${LIB_PATH}:${LLVM_HOME}/lib
 HEADER_PATH=${HEADER_PATH}:${LLVM_HOME}/include
 LDFLAGS="${LDFLAGS} -L${LLVM_HOME}/lib -Wl,-rpath,${LLVM_HOME}/lib"
+CPPFLAGS="-I${LLVM_HOME}/include ${CPPFLAGS}"
 
 # asciidoc xml processing
 export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
@@ -134,6 +136,8 @@ alias em="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -q -a /Applicat
 alias wscreate="hdiutil create -size 25gb -fs 'Case-sensitive HFS+' -type SPARSE -volname workspace workspace"
 alias wsmount='hdiutil attach -quiet -mountpoint ~/workspace ~/Documents/workspace.sparseimage'
 alias wsunmount='hdiutil detach -quiet ~/workspace'
+alias netapp='plink -batch -pw $(cat ~/.ssh/netapp/ocum) admin@netapp.ash2.bb-inf.net'
+alias jsh='jshell --startup ~/.jshellrc -q'
 
 # rg (grep on steroids) customizations
 export RIPGREP_CONFIG_PATH=~/.ripgreprc

@@ -1,5 +1,5 @@
 ;;; package --- Minimal Emacs init file
-;;; Time-stamp: <2021-03-27 08:02:09 dhruva>
+;;; Time-stamp: <2021-04-08 18:50:31 dhruva>
 ;;; Commentary:
 ;;; Simple Emacs setup for C/C++ development using language server
 ;;; Usage: ln -s ~/.dotfiles/init.el ~/.emacs.d/init.el
@@ -135,7 +135,7 @@
   :bind
   ;; ("C-k" . crux-kill-whole-line)
   ("C-c n" . crux-cleanup-buffer-or-region)
-  ("C-c f" . crux-recentf-ido-find-file)
+  ("C-c f" . crux-recentf-find-file)
   ("C-a" . crux-move-beginning-of-line)
   ([home] . crux-move-beginning-of-line))
 

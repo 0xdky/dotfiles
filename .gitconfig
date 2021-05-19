@@ -94,6 +94,14 @@
 [mergetool]
     prompt = false
 
+[difftool "p4"]
+    cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge $LOCAL $REMOTE
+    # cmd = open -W -a p4merge --args $LOCAL $REMOTE
+
+[mergetool "p4"]
+    cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge $PWD/$BASE $PWD/$REMOTE $PWD/$LOCAL $PWD/$MERGED
+    trustExitCode = false
+
 [difftool "xcode"]
     cmd = open -W -a FileMerge --args -left \"$LOCAL\" -right \"$PWD/$REMOTE\"
 
@@ -106,6 +114,9 @@
 
 [merge]
     tool = xcode
+
+[difftool "ediffclient"]
+    cmd = emacsclient -f ~/.emacs.d/server/emacs.server --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 
 [filesystem "AdoptOpenJDK|11.0.8|/dev/disk1s1"]
     timestampResolution = 8000 nanoseconds

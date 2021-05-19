@@ -88,8 +88,9 @@ endif
 " Initialize plugin system
 call plug#end()
 
-" set termguicolors
+"set termguicolors
 colorscheme monochrome
+hi MatchParen ctermfg=255 ctermbg=DarkGray
 
 if has('nvim')
     " lua require'nvim_lsp'.gopls.setup{}
